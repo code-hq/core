@@ -1,0 +1,18 @@
+version: "3.1"
+
+services:
+
+  db:
+    image: postgres:10
+    container_name: codehq-db
+    environment:
+      POSTGRES_DB:       ${DATABASE_NAME:-codehq}
+      POSTGRES_USER:     ${DATABASE_USER:-codehq}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-codehq}
+    ports:
+      - ${DATABASE_HOST_PORT:-30001}:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data: ~

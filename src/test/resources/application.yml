@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    # Use H2 (in-memory) for testing. This avoids needing to manage a test database which outlives the tests.
+    # With H2, the database is created and migrated during application initialisation and only lives as long
+    # as the application itself.
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE

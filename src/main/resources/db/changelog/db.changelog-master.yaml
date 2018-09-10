@@ -1,0 +1,196 @@
+databaseChangeLog:
+
+- changeSet:
+    id: init
+    author: karlrixon@gmail.com
+    changes:
+    - createTable:
+        tableName: application
+        columns:
+          - column:
+              name: id
+              type: varchar(100)
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: name
+              type: varchar(100)
+              constraints:
+                nullable: false
+    - createTable:
+        tableName: metric
+        columns:
+        - column:
+            name: id
+            type: varchar(100)
+            constraints:
+              primaryKey: true
+              nullable: false
+        - column:
+            name: name
+            type: varchar(100)
+            constraints:
+              nullable: false
+        - column:
+            name: description
+            type: text
+        - column:
+            name: direction
+            type: smallint
+            constraints:
+              nullable: false
+        - column:
+            name: contribution_policy
+            type: smallint
+            constraints:
+              nullable: false
+    - createTable:
+        tableName: metric_fraction
+        columns:
+        - column:
+            name: id
+            type: varchar(100)
+            constraints:
+              primaryKey: true
+              nullable: false
+    - createTable:
+        tableName: metric_simple
+        columns:
+        - column:
+            name: id
+            type: varchar(100)
+            constraints:
+              primaryKey: true
+              nullable: false
+    - createTable:
+        tableName: version
+        columns:
+        - column:
+            name: version_id
+            type: varchar(50)
+            constraints:
+              primaryKey: true
+              nullable: false
+        - column:
+            name: application_id
+            type: varchar(100)
+            constraints:
+              primaryKey: true
+              nullable: false
+        - column:
+            name: defined_at
+            type: datetime
+            constraints:
+              nullable: false
+    - createTable:
+        tableName: value
+        columns:
+        - column:
+            name: score_id
+            type: uuid
+            constraints:
+              primaryKey: true
+              nullable: false
+        - column:
+            name: type
+            type: smallint
+            constraints:
+              nullable: false
+        - column:
+            name: value
+            type: double
+        - column:
+            name: numerator
+            type: double
+        - column:
+            name: denominator
+            type: double
+    - createTable:
+        tableName: score
+        columns:
+          - column:
+              name: id
+              type: uuid
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: application_id
+              type: varchar(100)
+              constraints:
+                nullable: false
+          - column:
+              name: version_id
+              type: varchar(50)
+              constraints:
+                nullable: false
+          - column:
+              name: metric_id
+              type: varchar(100)
+              constraints:
+                nullable: false
+          - column:
+              name: collected_at
+              type: datetime
+              constraints:
+                nullable: false
+          - column:
+              name: scope
+              type: smallint
+    - addForeignKeyConstraint:
+        baseColumnNames: application_id
+        baseTableName: score
+        constraintName: fk_score_application
+        onDelete: cascade
+        onUpdate: cascade
+        referencedColumnNames: id
+        referencedTableName: application
+    - addForeignKeyConstraint:
+        baseColumnNames: metric_id
+        baseTableName: score
+        constraintName: fk_score_metric
+        onDelete: cascade
+        onUpdate: cascade
+        referencedColumnNames: id
+        referencedTableName: metric
+    - addForeignKeyConstraint:
+        baseColumnNames: application_id,version_id
+        baseTableName: score
+        constraintName: fk_score_version
+        onDelete: cascade
+        onUpdate: cascade
+        referencedColumnNames: application_id,version_id
+        referencedTableName: version
+    - addForeignKeyConstraint:
+        baseColumnNames: score_id
+        baseTableName: value
+        constraintName: fk_value_score
+        onDelete: cascade
+        onUpdate: restrict
+        referencedColumnNames: id
+        referencedTableName: score
+    - addForeignKeyConstraint:
+        baseColumnNames: application_id
+        baseTableName: version
+        constraintName: fk_version_application
+        onDelete: cascade
+        onUpdate: cascade
+        referencedColumnNames: id
+        referencedTableName: application
+    - addForeignKeyConstraint:
+        baseColumnNames: id
+        baseTableName: metric_fraction
+        constraintName: fk_metric_fraction_metric
+        onDelete: cascade
+        onUpdate: cascade
+        referencedColumnNames: id
+        referencedTableName: metric
+    - addForeignKeyConstraint:
+        baseColumnNames: id
+        baseTableName: metric_simple
+        constraintName: fk_metric_simple_metric
+        onDelete: cascade
+        onUpdate: cascade
+        referencedColumnNames: id
+        referencedTableName: metric
